@@ -1,5 +1,8 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+
+import Javazord.Zordon.Usuario;
+
 public class MainCadastro
 {
 

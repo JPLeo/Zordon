@@ -1,3 +1,5 @@
+package Javazord.Zordon;
+
 public class Usuario
 {
     private int idUsuario;
@@ -6,9 +8,14 @@ public class Usuario
 
     public Usuario(int idUsuario,String nome)
     {
+        this(idUsuario, nome, 0);
+    }
+
+    public Usuario(int idUsuario, String nome, int pontuacaoTotal)
+    {
         this.idUsuario = idUsuario;
         this.nome = nome;
-        this.pontuacaoTotal = 0;
+        this.pontuacaoTotal = pontuacaoTotal;
     }
 
     public int getIdUsuario()

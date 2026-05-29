@@ -20,6 +20,7 @@ public class AppEntrada extends Game {
     public BitmapFont font;
     public FitViewport fViewport;
     public ScreenViewport sViewport;
+    public Usuario usuarioLogado;
 
 
     public void create(){
@@ -31,9 +32,10 @@ public class AppEntrada extends Game {
         font.getData().setScale( 3 * (fViewport.getWorldHeight() / Gdx.graphics.getHeight()));
 
         skin = new Skin(Gdx.files.internal("ShadeUI/shadeui/uiskin.json"));
+        UiEstilo.registrar(skin);
         batch = new SpriteBatch();
 
-        this.setScreen(new MenuPrincipal(this));
+        this.setScreen(new TelaLogin(this));
     }
 
     public void render(){

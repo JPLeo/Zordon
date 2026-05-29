@@ -1,4 +1,7 @@
 import java.time.LocalDate;
+
+import Javazord.Zordon.Usuario;
+
 public class Partida
 {
     private Usuario usuario;

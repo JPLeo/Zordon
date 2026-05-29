@@ -1,28 +1,38 @@
-CREATE TABLE `jogos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(100) NOT NULL,
-  `descricao` text DEFAULT NULL,
-  `dificuldade` enum('FACIL','MEDIO','DIFICIL') DEFAULT NULL,
-  `ativio` tinyint(1) DEFAULT 1,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE DATABASE IF NOT EXISTS plataforma_jogos
+  DEFAULT CHARACTER SET utf8mb4
+  COLLATE utf8mb4_general_ci;
 
-CREATE TABLE `usuario` (
-  `usuario_id` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(100) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `senha` varchar(255) DEFAULT NULL,
-  `pontos` int(11) DEFAULT 0,
-  `vitorias` int(11) DEFAULT 0,
-  `derrotas` int(11) DEFAULT 0,
-  PRIMARY KEY (`usuario_id`)
+USE plataforma_jogos;
+
+-- Usuario.java: idUsuario, nome, pontuacaoTotal
+CREATE TABLE usuario (
+  id_usuario INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(100) NOT NULL,
+  pontuacao_total INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (id_usuario)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE partidas (
-id INT AUTO_INCREMENT PRIMARY KEY,
-usuario_id INT NOT NULL,
-jogo_id INT NOT NULL,
-pontuacao INT DEFAULT 0,
-resultado ENUM('VITORIA','DERROTA'),
-data_partida TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+-- Jogo.java: idJogo, nomeJogo, categoria, dificuldade
+CREATE TABLE jogo (
+  id_jogo INT NOT NULL AUTO_INCREMENT,
+  nome_jogo VARCHAR(100) NOT NULL,
+  categoria VARCHAR(100) NOT NULL,
+  dificuldade VARCHAR(100) NOT NULL,
+  PRIMARY KEY (id_jogo)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Partida.java: idPartida, usuario, jogo, resultado, modoJogo, pontuacao, dataPartida
+CREATE TABLE partida (
+  id_partida INT NOT NULL AUTO_INCREMENT,
+  id_usuario INT NOT NULL,
+  id_jogo INT NOT NULL,
+  resultado INT NOT NULL,
+  modo_jogo VARCHAR(100) NOT NULL,
+  pontuacao INT NOT NULL DEFAULT 0,
+  data_partida DATE NOT NULL DEFAULT (CURRENT_DATE),
+  PRIMARY KEY (id_partida),
+  CONSTRAINT fk_partida_usuario
+    FOREIGN KEY (id_usuario) REFERENCES usuario (id_usuario),
+  CONSTRAINT fk_partida_jogo
+    FOREIGN KEY (id_jogo) REFERENCES jogo (id_jogo)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
