@@ -21,6 +21,11 @@ public final class UsuarioApi {
         void erro(String mensagem);
     }
 
+    public interface PontuacaoCallback {
+        void sucesso(Usuario usuario);
+        void erro(String mensagem);
+    }
+
     private UsuarioApi() {}
 
     public static void entrar(String nome, EntrarCallback callback) {
@@ -86,5 +91,52 @@ public final class UsuarioApi {
 
     private static class ErroResposta {
         public String erro;
+    }
+
+    public static void adicionarPontuacao(int idUsuario, int pontuacao, PontuacaoCallback callback) {
+        String corpo = JSON.toJson(new PontuacaoRequest(pontuacao));
+
+        Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
+        request.setUrl(URL_BASE + "/usuarios/" + idUsuario + "/pontuacao");
+        request.setHeader("Content-Type", "application/json");
+        request.setContent(corpo);
+
+        Gdx.net.sendHttpRequest(request, new Net.HttpResponseListener() {
+            @Override
+            public void handleHttpResponse(Net.HttpResponse httpResponse) {
+                final int status = httpResponse.getStatus().getStatusCode();
+                final String resposta = httpResponse.getResultAsString();
+
+                Gdx.app.postRunnable(() -> {
+                    if (status >= 200 && status < 300) {
+                        UsuarioResposta dto = READER_RESPONSE.fromJson(UsuarioResposta.class, resposta);
+                        callback.sucesso(new Usuario(dto.idUsuario, dto.nome, dto.pontuacaoTotal));
+                    } else {
+                        ErroResposta erro = tentarErro(resposta);
+                        callback.erro(erro != null ? erro.erro : "Nao foi possivel atualizar pontuacao (HTTP " + status + ")");
+                    }
+                });
+            }
+
+            @Override
+            public void failed(Throwable t) {
+                Gdx.app.postRunnable(() ->
+                    callback.erro("Servidor offline. Inicie o backend (npm start em backend-node).")
+                );
+            }
+
+            @Override
+            public void cancelled() {
+                Gdx.app.postRunnable(() -> callback.erro("Requisicao cancelada."));
+            }
+        });
+    }
+
+    private static class PontuacaoRequest {
+        public int pontuacao;
+
+        PontuacaoRequest(int pontuacao) {
+            this.pontuacao = pontuacao;
+        }
     }
 }

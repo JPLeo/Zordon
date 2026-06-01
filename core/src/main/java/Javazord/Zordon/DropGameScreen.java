@@ -124,8 +124,25 @@ public class DropGameScreen implements Screen {
 
     private void sairDoJogo() {
         musica.stop();
-        app.setScreen(new MenuPrincipal(app));
-        dispose();
+        if (gotasColetadas > 0 && app.usuarioLogado != null) {
+            UsuarioApi.adicionarPontuacao(app.usuarioLogado.getIdUsuario(), gotasColetadas, new UsuarioApi.PontuacaoCallback() {
+                @Override
+                public void sucesso(Usuario usuario) {
+                    app.usuarioLogado = usuario;
+                    app.setScreen(new MenuPrincipal(app));
+                    dispose();
+                }
+
+                @Override
+                public void erro(String mensagem) {
+                    app.setScreen(new MenuPrincipal(app));
+                    dispose();
+                }
+            });
+        } else {
+            app.setScreen(new MenuPrincipal(app));
+            dispose();
+        }
     }
 
     @Override
