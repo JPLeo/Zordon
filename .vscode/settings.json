@@ -1,0 +1,3 @@
+{
+    "sqlProfiler.connectionString": "jdbc:mariadb://localhost:3306/plataforma_jogos"
+}
