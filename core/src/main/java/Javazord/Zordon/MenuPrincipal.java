@@ -133,6 +133,17 @@ public class MenuPrincipal implements Screen {
                 dispose();
             }
         )).growX().minHeight(220f).padBottom(16f).row();
+
+        conteudo.add(UiEstilo.cardJogo(
+                app.skin,
+                "Conhecimento",
+                "Quiz",
+                "Responda perguntas de conhecimentos gerais e some pontos.",
+                () -> {
+                    app.setScreen(new QuizGameScreen(app));
+                    dispose();
+                }
+            )).growX().minHeight(220f).padBottom(16f).row();
     }
 
     @Override
