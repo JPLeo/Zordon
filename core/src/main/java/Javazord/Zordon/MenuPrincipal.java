@@ -1,11 +1,7 @@
-/**
- * João Pedro Dias - 2025.2.0120.0007-2
- * 2026.1-CMP1223/C01 - Fundamentos de Programação
- * orientada a objetos
- */
 package Javazord.Zordon;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
@@ -123,6 +119,7 @@ public class MenuPrincipal implements Screen {
         tituloSecao.setAlignment(Align.left);
         conteudo.add(tituloSecao).left().padBottom(20f).row();
 
+        // 1. Jogo Balde das Gotas
         conteudo.add(UiEstilo.cardJogo(
             app.skin,
             "Agilidade",
@@ -134,16 +131,29 @@ public class MenuPrincipal implements Screen {
             }
         )).growX().minHeight(220f).padBottom(16f).row();
 
+        // 2. Jogo do Quiz
         conteudo.add(UiEstilo.cardJogo(
-                app.skin,
-                "Conhecimento",
-                "Quiz",
-                "Responda perguntas de conhecimentos gerais e some pontos.",
-                () -> {
-                    app.setScreen(new QuizGameScreen(app));
-                    dispose();
-                }
-            )).growX().minHeight(220f).padBottom(16f).row();
+            app.skin,
+            "Conhecimento",
+            "Quiz",
+            "Responda perguntas de conhecimentos gerais e some pontos.",
+            () -> {
+                app.setScreen(new QuizGameScreen(app));
+                dispose();
+            }
+        )).growX().minHeight(220f).padBottom(16f).row();
+
+        // 🎯 3. NOVO JOGO: Jogo da Velha
+        conteudo.add(UiEstilo.cardJogo(
+            app.skin,
+            "Estrategia",
+            "Jogo da Velha",
+            "Desafie a lógica em um tabuleiro clássico 3x3 e conquiste pontos.",
+            () -> {
+                app.setScreen(new JogoDaVelhaScreen(app));
+                dispose();
+            }
+        )).growX().minHeight(220f).padBottom(16f).row();
     }
 
     @Override
