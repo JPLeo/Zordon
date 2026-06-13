@@ -142,18 +142,6 @@ public class MenuPrincipal implements Screen {
                 dispose();
             }
         )).growX().minHeight(220f).padBottom(16f).row();
-
-        // 🎯 3. NOVO JOGO: Jogo da Velha
-        conteudo.add(UiEstilo.cardJogo(
-            app.skin,
-            "Estrategia",
-            "Jogo da Velha",
-            "Desafie a lógica em um tabuleiro clássico 3x3 e conquiste pontos.",
-            () -> {
-                app.setScreen(new JogoDaVelhaScreen(app));
-                dispose();
-            }
-        )).growX().minHeight(220f).padBottom(16f).row();
     }
 
     @Override
