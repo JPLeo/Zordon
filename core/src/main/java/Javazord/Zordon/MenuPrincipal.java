@@ -1,7 +1,6 @@
 package Javazord.Zordon;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
@@ -9,14 +8,21 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class MenuPrincipal implements Screen {
+    private static final float LARGURA_MINIMA_GRID = 780f;
+    private static final float ALTURA_CARD_JOGO = 190f;
+    private static final float LARGURA_MAXIMA_GRID = 860f;
+    private static final float LARGURA_CARD_STAT = 220f;
+
     final AppEntrada app;
     private Stage stage;
     private Table conteudoScroll;
+    private Table gridJogos;
     private ScrollPane scrollPane;
     private InputAdapter scrollMouse;
 
@@ -29,7 +35,7 @@ public class MenuPrincipal implements Screen {
     private void montarLayout() {
         conteudoScroll = new Table();
         conteudoScroll.top().left();
-        conteudoScroll.pad(40f, 56f, 48f, 56f);
+        conteudoScroll.pad(30f, 48f, 40f, 48f);
         conteudoScroll.defaults().growX();
 
         if (app.usuarioLogado != null) {
@@ -66,27 +72,27 @@ public class MenuPrincipal implements Screen {
 
     private void atualizarLarguraConteudo(int larguraTela) {
         if (conteudoScroll != null) {
-            conteudoScroll.setWidth(Math.max(320f, larguraTela - 112f));
+            conteudoScroll.setWidth(Math.max(320f, larguraTela - 96f));
         }
+        montarGridJogos();
     }
 
     private void montarCabecalho(Table conteudo) {
         Table cabecalho = new Table();
-        cabecalho.add(UiEstilo.tituloApp(app.skin, "Zordon")).left().expandX();
-        cabecalho.add(UiEstilo.badge(app.skin, app.usuarioLogado.getPontuacaoTotal() + " pts")).right();
-        conteudo.add(cabecalho).growX().padBottom(28f).row();
+        cabecalho.add(UiEstilo.marcaApp(app.skin, "Zordon")).left().expandX();
+        conteudo.add(cabecalho).growX().padBottom(22f).row();
     }
 
     private void montarBoasVindas(Table conteudo) {
         Table card = UiEstilo.cardNavy(app.skin);
-        card.pad(28f, 32f, 28f, 32f);
+        card.pad(18f, 22f, 18f, 22f);
 
         String primeiroNome = app.usuarioLogado.getNome().split(" ")[0];
-        Label saudacao = new Label("Ola, " + primeiroNome + "!", app.skin, "arcade-titulo-card");
+        Label saudacao = new Label("Olá, " + primeiroNome + "!", app.skin, "arcade-titulo-card");
         saudacao.setAlignment(Align.left);
 
         Label mensagem = new Label(
-            "Que bom ver voce de volta. Pronto para exercitar a mente hoje?",
+            "Que bom ver você de volta. Pronto para exercitar a mente hoje?",
             app.skin,
             "arcade-corpo-card"
         );
@@ -95,53 +101,100 @@ public class MenuPrincipal implements Screen {
 
         card.add(saudacao).left().growX().row();
         card.add(mensagem).left().growX().padTop(10f).row();
-        conteudo.add(card).growX().padBottom(24f).row();
+        conteudo.add(card).growX().height(112f).padBottom(18f).row();
     }
 
     private void montarEstatisticas(Table conteudo) {
         Table linha = new Table();
-        linha.defaults().expandX().fillX().padRight(12f);
+        linha.defaults().width(LARGURA_CARD_STAT).height(86f).padRight(12f);
 
         Table saldo = UiEstilo.cardEstatistica(
             app.skin,
-            "Saldo atual",
+            "Pontuação total",
             app.usuarioLogado.getPontuacaoTotal() + " pts"
         );
-        Table sequencia = UiEstilo.cardEstatistica(app.skin, "Sequencia", "1 dia");
+        Table jogos = UiEstilo.cardEstatistica(app.skin, "Jogos disponíveis", "3");
 
         linha.add(saldo);
-        linha.add(sequencia).padRight(0f);
-        conteudo.add(linha).growX().padBottom(28f).row();
+        linha.add(jogos).padRight(0f);
+        conteudo.add(linha).width(LARGURA_CARD_STAT * 2f + 12f).left().padBottom(22f).row();
     }
 
     private void montarBiblioteca(Table conteudo) {
         Label tituloSecao = new Label("Biblioteca de Jogos", app.skin, "arcade-secao");
         tituloSecao.setAlignment(Align.left);
-        conteudo.add(tituloSecao).left().padBottom(20f).row();
+        conteudo.add(tituloSecao).left().padBottom(14f).row();
 
-        // 1. Jogo Balde das Gotas
-        conteudo.add(UiEstilo.cardJogo(
+        gridJogos = new Table();
+        conteudo.add(gridJogos).growX().maxWidth(LARGURA_MAXIMA_GRID).left().row();
+        montarGridJogos();
+    }
+
+    private void montarGridJogos() {
+        if (gridJogos == null || app.usuarioLogado == null) {
+            return;
+        }
+
+        gridJogos.clearChildren();
+        gridJogos.defaults().width(duasColunas() ? 424f : Math.min(520f, conteudoScroll.getWidth()))
+            .height(ALTURA_CARD_JOGO).padBottom(16f);
+
+        boolean duasColunas = duasColunas();
+
+        adicionarCardJogo(gridJogos, duasColunas, 0,
             app.skin,
             "Agilidade",
             "Balde das Gotas",
-            "Mova o balde e colete o maximo de gotas antes que elas caiam.",
+            "Mova o balde e colete o máximo de gotas antes que elas caiam.",
+            "Jogar Balde",
             () -> {
                 app.setScreen(new DropGameScreen(app));
                 dispose();
             }
-        )).growX().minHeight(220f).padBottom(16f).row();
+        );
 
-        // 2. Jogo do Quiz
-        conteudo.add(UiEstilo.cardJogo(
+        adicionarCardJogo(gridJogos, duasColunas, 1,
             app.skin,
             "Conhecimento",
             "Quiz",
             "Responda perguntas de conhecimentos gerais e some pontos.",
+            "Jogar Quiz",
             () -> {
                 app.setScreen(new QuizGameScreen(app));
                 dispose();
             }
-        )).growX().minHeight(220f).padBottom(16f).row();
+        );
+
+        adicionarCardJogo(gridJogos, duasColunas, 2,
+            app.skin,
+            "Estratégia",
+            "Jogo da Velha",
+            "Desafie a lógica em um tabuleiro clássico 3x3 e conquiste pontos.",
+            "Jogar Velha",
+            () -> {
+                app.setScreen(new JogoDaVelhaScreen(app));
+                dispose();
+            }
+        );
+    }
+
+    private void adicionarCardJogo(Table grid, boolean duasColunas, int indice, Skin skin,
+                                  String categoria, String titulo, String descricao,
+                                  String textoBotao, Runnable aoJogar) {
+        Table card = UiEstilo.cardJogo(skin, categoria, titulo, descricao, textoBotao, aoJogar);
+
+        if (duasColunas) {
+            grid.add(card).padRight(indice % 2 == 0 ? 16f : 0f);
+            if (indice % 2 == 1) {
+                grid.row();
+            }
+        } else {
+            grid.add(card).row();
+        }
+    }
+
+    private boolean duasColunas() {
+        return conteudoScroll != null && conteudoScroll.getWidth() >= LARGURA_MINIMA_GRID;
     }
 
     @Override

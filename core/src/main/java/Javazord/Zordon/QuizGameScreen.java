@@ -16,9 +16,14 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class QuizGameScreen implements Screen
 {
+    private static final float LARGURA_CARD = 690f;
+    private static final float LARGURA_PERGUNTA = 610f;
+    private static final float LARGURA_BOTAO = 520f;
+
     final AppEntrada app;
 
     private Stage uiStage;
+    private Label lblProgresso;
     private Label lblPontuacao;
     private Label lblPergunta;
     private Label lblResultado;
@@ -55,16 +60,19 @@ public class QuizGameScreen implements Screen
 
         Table raiz = new Table();
         raiz.setFillParent(true);
-        raiz.pad(30f);
+        raiz.pad(26f);
         raiz.setTouchable(Touchable.childrenOnly);
 
         Table card = UiEstilo.cardNavy(app.skin);
-        card.pad(28f, 32f, 28f, 32f);
+        card.pad(24f, 30f, 24f, 30f);
 
         Label titulo = new Label("Quiz", app.skin, "arcade-titulo-card");
         titulo.setAlignment(Align.center);
 
-        lblPontuacao = new Label("Pontuacao: " + pontuacao, app.skin, "arcade-corpo-card");
+        lblProgresso = new Label("", app.skin, "arcade-corpo-card");
+        lblProgresso.setAlignment(Align.center);
+
+        lblPontuacao = new Label("Pontuação: " + pontuacao, app.skin, "arcade-corpo-card");
         lblPontuacao.setAlignment(Align.center);
 
         lblPergunta = new Label(perguntaAtual.getEnunciado(), app.skin, "arcade-corpo-card");
@@ -74,17 +82,17 @@ public class QuizGameScreen implements Screen
         lblResultado = new Label("", app.skin, "arcade-corpo-card");
         lblResultado.setAlignment(Align.center);
 
-        btnA = new TextButton(perguntaAtual.getAlternativaA(), app.skin, "arcade-botao");
-        btnB = new TextButton(perguntaAtual.getAlternativaB(), app.skin, "arcade-botao");
-        btnC = new TextButton(perguntaAtual.getAlternativaC(), app.skin, "arcade-botao");
-        btnD = new TextButton(perguntaAtual.getAlternativaD(), app.skin, "arcade-botao");
+        btnA = criarBotaoResposta(perguntaAtual.getAlternativaA());
+        btnB = criarBotaoResposta(perguntaAtual.getAlternativaB());
+        btnC = criarBotaoResposta(perguntaAtual.getAlternativaC());
+        btnD = criarBotaoResposta(perguntaAtual.getAlternativaD());
 
         btnA.addListener(criarListenerResposta('a'));
         btnB.addListener(criarListenerResposta('b'));
         btnC.addListener(criarListenerResposta('c'));
         btnD.addListener(criarListenerResposta('d'));
 
-        btnProxima = new TextButton("Proxima", app.skin, "arcade-botao");
+        btnProxima = new TextButton("Próxima", app.skin, "arcade-botao");
         btnProxima.setVisible(false);
         btnProxima.addListener(new ChangeListener()
         {
@@ -95,7 +103,7 @@ public class QuizGameScreen implements Screen
             }
         });
 
-        TextButton btnSair = new TextButton("Sair", app.skin, "arcade-botao");
+        TextButton btnSair = new TextButton("Sair", app.skin, "arcade-botao-navy");
         btnSair.addListener(new ChangeListener()
         {
             @Override
@@ -105,21 +113,31 @@ public class QuizGameScreen implements Screen
             }
         });
 
-        card.add(titulo).growX().padBottom(18f).row();
-        card.add(lblPontuacao).growX().padBottom(18f).row();
-        card.add(lblPergunta).width(700f).padBottom(18f).row();
+        atualizarProgresso();
+        card.add(titulo).growX().padBottom(12f).row();
+        card.add(lblProgresso).growX().padBottom(6f).row();
+        card.add(lblPontuacao).growX().padBottom(16f).row();
+        card.add(lblPergunta).width(LARGURA_PERGUNTA).growX().padBottom(16f).row();
 
-        card.add(btnA).width(520f).height(48f).padBottom(10f).row();
-        card.add(btnB).width(520f).height(48f).padBottom(10f).row();
-        card.add(btnC).width(520f).height(48f).padBottom(10f).row();
-        card.add(btnD).width(520f).height(48f).padBottom(18f).row();
+        card.add(btnA).width(LARGURA_BOTAO).growX().minHeight(44f).padBottom(8f).row();
+        card.add(btnB).width(LARGURA_BOTAO).growX().minHeight(44f).padBottom(8f).row();
+        card.add(btnC).width(LARGURA_BOTAO).growX().minHeight(44f).padBottom(8f).row();
+        card.add(btnD).width(LARGURA_BOTAO).growX().minHeight(44f).padBottom(16f).row();
 
-        card.add(lblResultado).growX().padBottom(14f).row();
+        card.add(lblResultado).growX().minHeight(24f).padBottom(12f).row();
         card.add(btnProxima).width(220f).height(42f).padBottom(12f).row();
-        card.add(btnSair).width(180f).height(42f).row();
+        card.add(btnSair).width(140f).height(40f).row();
 
-        raiz.add(card).center();
+        raiz.add(card).width(LARGURA_CARD).maxWidth(LARGURA_CARD).growX().center();
         uiStage.addActor(raiz);
+    }
+
+    private TextButton criarBotaoResposta(String texto)
+    {
+        TextButton botao = new TextButton(texto, app.skin, "arcade-botao-resposta");
+        botao.getLabel().setWrap(true);
+        botao.getLabel().setAlignment(Align.center);
+        return botao;
     }
 
     private ChangeListener criarListenerResposta(final char alternativaEscolhida)
@@ -132,18 +150,52 @@ public class QuizGameScreen implements Screen
                 if (perguntaAtual.conferePergunta(alternativaEscolhida))
                 {
                     pontuacao += 10;
-                    lblPontuacao.setText("Pontuacao: " + pontuacao);
-                    lblResultado.setText("Resposta correta!");
+                    lblPontuacao.setText("Pontuação: " + pontuacao);
+                    lblResultado.setText("Resposta correta! +10 pts");
                 }
                 else
                 {
                     lblResultado.setText("Resposta incorreta! Correta: " + getTextoAlternativaCorreta());
                 }
 
+                mostrarFeedback(alternativaEscolhida);
                 bloquearAlternativas();
                 btnProxima.setVisible(true);
             }
         };
+    }
+
+    private void mostrarFeedback(char alternativaEscolhida)
+    {
+        char correta = perguntaAtual.getAlternativaCerta();
+        TextButton botaoCorreto = getBotaoAlternativa(correta);
+        TextButton botaoEscolhido = getBotaoAlternativa(alternativaEscolhida);
+
+        botaoCorreto.setStyle(app.skin.get("arcade-botao-correto", TextButton.TextButtonStyle.class));
+        if (alternativaEscolhida != correta)
+        {
+            botaoEscolhido.setStyle(app.skin.get("arcade-botao-incorreto", TextButton.TextButtonStyle.class));
+        }
+    }
+
+    private TextButton getBotaoAlternativa(char alternativa)
+    {
+        if (alternativa == 'a')
+        {
+            return btnA;
+        }
+        else if (alternativa == 'b')
+        {
+            return btnB;
+        }
+        else if (alternativa == 'c')
+        {
+            return btnC;
+        }
+        else
+        {
+            return btnD;
+        }
     }
 
     private void bloquearAlternativas()
@@ -156,6 +208,12 @@ public class QuizGameScreen implements Screen
 
     private void liberarAlternativas()
     {
+        TextButton.TextButtonStyle estiloResposta = app.skin.get("arcade-botao-resposta", TextButton.TextButtonStyle.class);
+        btnA.setStyle(estiloResposta);
+        btnB.setStyle(estiloResposta);
+        btnC.setStyle(estiloResposta);
+        btnD.setStyle(estiloResposta);
+
         btnA.setDisabled(false);
         btnB.setDisabled(false);
         btnC.setDisabled(false);
@@ -174,6 +232,7 @@ public class QuizGameScreen implements Screen
 
         perguntaAtual = quiz.getPergunta(indicePerguntaAtual);
 
+        atualizarProgresso();
         lblPergunta.setText(perguntaAtual.getEnunciado());
         lblResultado.setText("");
 
@@ -188,8 +247,9 @@ public class QuizGameScreen implements Screen
 
     private void finalizarQuiz()
     {
-        lblPergunta.setText("Fim do Quiz! Pontuacao final: " + pontuacao);
-        lblResultado.setText("Salvando pontuacao...");
+        lblProgresso.setText("Quiz finalizado");
+        lblPergunta.setText("Fim do Quiz! Pontuação final: " + pontuacao);
+        lblResultado.setText("Salvando pontuação...");
 
         btnA.setVisible(false);
         btnB.setVisible(false);
@@ -217,7 +277,7 @@ public class QuizGameScreen implements Screen
 
         if (app.usuarioLogado == null)
         {
-            lblResultado.setText("Usuario nao encontrado.");
+            lblResultado.setText("Usuário não encontrado.");
             return;
         }
 
@@ -230,7 +290,7 @@ public class QuizGameScreen implements Screen
                 public void sucesso(Usuario usuario)
                 {
                     app.usuarioLogado = usuario;
-                    lblResultado.setText("Pontuacao salva!");
+                    lblResultado.setText("Pontuação salva!");
                 }
 
                 @Override
@@ -243,26 +303,31 @@ public class QuizGameScreen implements Screen
     }
 
     private String getTextoAlternativaCorreta()
-{
-    char correta = perguntaAtual.getAlternativaCerta();
+    {
+        char correta = perguntaAtual.getAlternativaCerta();
 
-    if (correta == 'a')
-    {
-        return perguntaAtual.getAlternativaA();
+        if (correta == 'a')
+        {
+            return perguntaAtual.getAlternativaA();
+        }
+        else if (correta == 'b')
+        {
+            return perguntaAtual.getAlternativaB();
+        }
+        else if (correta == 'c')
+        {
+            return perguntaAtual.getAlternativaC();
+        }
+        else
+        {
+            return perguntaAtual.getAlternativaD();
+        }
     }
-    else if (correta == 'b')
+
+    private void atualizarProgresso()
     {
-        return perguntaAtual.getAlternativaB();
+        lblProgresso.setText("Pergunta " + (indicePerguntaAtual + 1) + "/" + quiz.getQuantidadePerguntasPartida());
     }
-    else if (correta == 'c')
-    {
-        return perguntaAtual.getAlternativaC();
-    }
-    else
-    {
-        return perguntaAtual.getAlternativaD();
-    }
-}
 
     private void sairDoQuiz()
     {

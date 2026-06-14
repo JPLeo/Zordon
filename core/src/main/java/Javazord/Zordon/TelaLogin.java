@@ -1,6 +1,7 @@
 package Javazord.Zordon;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -13,6 +14,9 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class TelaLogin implements Screen {
+    private static final float LARGURA_CARD = 500f;
+    private static final float LARGURA_CONTEUDO = 420f;
+
     private final AppEntrada app;
     private Stage stage;
     private TextField campoNome;
@@ -30,16 +34,16 @@ public class TelaLogin implements Screen {
     private void montarLayout() {
         Table raiz = new Table();
         raiz.setFillParent(true);
-        raiz.pad(56f, 64f, 56f, 64f);
+        raiz.pad(42f, 56f, 42f, 56f);
 
         Table card = UiEstilo.cardNavy(app.skin);
-        card.pad(36f, 40f, 36f, 40f);
+        card.pad(28f, 34f, 30f, 34f);
 
         Label saudacao = new Label("Bem-vindo!", app.skin, "arcade-titulo-card");
         saudacao.setAlignment(Align.left);
 
         Label instrucao = new Label(
-            "Digite seu nome para comecar.\nSeu progresso sera salvo automaticamente.",
+            "Digite seu nome para começar.\nSeu progresso será salvo automaticamente.",
             app.skin,
             "arcade-corpo-card"
         );
@@ -49,7 +53,7 @@ public class TelaLogin implements Screen {
         Label lblNome = new Label("Nome do jogador", app.skin, "arcade-corpo-card");
 
         campoNome = new TextField("", app.skin, "arcade-campo-texto");
-        campoNome.setMessageText("Ex.: Joao Silva");
+        campoNome.setMessageText("Ex.: João Silva");
 
         btnEntrar = new TextButton("Jogar agora", app.skin, "arcade-botao");
 
@@ -60,17 +64,17 @@ public class TelaLogin implements Screen {
         lblStatus.setAlignment(Align.center);
 
         card.add(saudacao).left().row();
-        card.add(instrucao).width(460f).left().padTop(10f).row();
-        card.add(lblNome).left().padTop(28f).row();
-        card.add(campoNome).width(460f).height(52f).padTop(10f).row();
-        card.add(btnEntrar).width(460f).height(52f).padTop(22f).row();
+        card.add(instrucao).width(LARGURA_CONTEUDO).left().padTop(10f).row();
+        card.add(lblNome).left().padTop(22f).row();
+        card.add(campoNome).width(LARGURA_CONTEUDO).height(46f).padTop(8f).row();
+        card.add(btnEntrar).width(180f).height(46f).left().padTop(18f).row();
 
-        raiz.add(UiEstilo.tituloApp(app.skin, "Zordon")).center().row();
+        raiz.add(UiEstilo.marcaApp(app.skin, "Zordon")).center().row();
         raiz.add(UiEstilo.subtituloApp(app.skin, "Plataforma de Jogos")).padTop(6f).center().row();
-        raiz.add().height(48f).row();
-        raiz.add(card).width(540f).center().row();
-        raiz.add(lblErro).width(540f).padTop(14f).center().row();
-        raiz.add(lblStatus).padTop(6f).center().row();
+        raiz.add().height(34f).row();
+        raiz.add(card).width(LARGURA_CARD).maxWidth(LARGURA_CARD).growX().center().row();
+        raiz.add(lblErro).width(LARGURA_CARD).minHeight(22f).padTop(14f).center().row();
+        raiz.add(lblStatus).width(LARGURA_CARD).minHeight(22f).padTop(6f).center().row();
 
         btnEntrar.addListener(new ChangeListener() {
             @Override
@@ -120,6 +124,10 @@ public class TelaLogin implements Screen {
 
     @Override
     public void render(float delta) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            confirmarEntrada();
+        }
+
         ScreenUtils.clear(UiEstilo.FUNDO);
         stage.getViewport().apply();
         stage.act(delta);
@@ -134,6 +142,7 @@ public class TelaLogin implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        stage.setKeyboardFocus(campoNome);
     }
 
     @Override

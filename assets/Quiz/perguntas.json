@@ -1,0 +1,165 @@
+{
+  "quantidadePerguntasPartida": 5,
+  "perguntas": [
+    {
+      "enunciado": "Qual o maior planeta do sistema solar?",
+      "alternativaA": "Jupiter",
+      "alternativaB": "Marte",
+      "alternativaC": "Terra",
+      "alternativaD": "Saturno",
+      "alternativaCerta": "a"
+    },
+    {
+      "enunciado": "Quem pintou a obra Mona Lisa?",
+      "alternativaA": "Pablo Picasso",
+      "alternativaB": "Leonardo da Vinci",
+      "alternativaC": "Vincent van Gogh",
+      "alternativaD": "Michelangelo",
+      "alternativaCerta": "b"
+    },
+    {
+      "enunciado": "Quantos continentes existem no planeta Terra?",
+      "alternativaA": "5",
+      "alternativaB": "6",
+      "alternativaC": "7",
+      "alternativaD": "8",
+      "alternativaCerta": "c"
+    },
+    {
+      "enunciado": "Qual elemento quimico e representado pelo simbolo 'O'?",
+      "alternativaA": "Ouro",
+      "alternativaB": "Oxigenio",
+      "alternativaC": "Osmio",
+      "alternativaD": "Prata",
+      "alternativaCerta": "b"
+    },
+    {
+      "enunciado": "Qual foi o primeiro presidente do Brasil?",
+      "alternativaA": "Getulio Vargas",
+      "alternativaB": "Juscelino Kubitschek",
+      "alternativaC": "Deodoro da Fonseca",
+      "alternativaD": "Fernando Collor",
+      "alternativaCerta": "c"
+    },
+    {
+      "enunciado": "Qual o maior animal terrestre do mundo?",
+      "alternativaA": "Girafa",
+      "alternativaB": "Hipopotamo",
+      "alternativaC": "Rinoceronte",
+      "alternativaD": "Elefante-africano",
+      "alternativaCerta": "d"
+    },
+    {
+      "enunciado": "Qual e a metade de 100?",
+      "alternativaA": "50",
+      "alternativaB": "40",
+      "alternativaC": "25",
+      "alternativaD": "60",
+      "alternativaCerta": "a"
+    },
+    {
+      "enunciado": "Quanto e 8 x 7?",
+      "alternativaA": "54",
+      "alternativaB": "64",
+      "alternativaC": "48",
+      "alternativaD": "56",
+      "alternativaCerta": "d"
+    },
+    {
+      "enunciado": "Quem descobriu o Brasil segundo a historia tradicional?",
+      "alternativaA": "Pedro Alvares Cabral",
+      "alternativaB": "Cristovao Colombo",
+      "alternativaC": "Vasco da Gama",
+      "alternativaD": "Tiradentes",
+      "alternativaCerta": "a"
+    },
+    {
+      "enunciado": "Qual e a capital do Brasil?",
+      "alternativaA": "Sao Paulo",
+      "alternativaB": "Rio de Janeiro",
+      "alternativaC": "Brasilia",
+      "alternativaD": "Belo Horizonte",
+      "alternativaCerta": "c"
+    },
+    {
+      "enunciado": "Qual planeta e conhecido como planeta vermelho?",
+      "alternativaA": "Venus",
+      "alternativaB": "Marte",
+      "alternativaC": "Mercurio",
+      "alternativaD": "Netuno",
+      "alternativaCerta": "b"
+    },
+    {
+      "enunciado": "Qual e o resultado de 12 + 15?",
+      "alternativaA": "25",
+      "alternativaB": "26",
+      "alternativaC": "27",
+      "alternativaD": "28",
+      "alternativaCerta": "c"
+    },
+    {
+      "enunciado": "Qual e o maior oceano do planeta?",
+      "alternativaA": "Atlantico",
+      "alternativaB": "Indico",
+      "alternativaC": "Artico",
+      "alternativaD": "Pacifico",
+      "alternativaCerta": "d"
+    },
+    {
+      "enunciado": "Quem escreveu Dom Casmurro?",
+      "alternativaA": "Machado de Assis",
+      "alternativaB": "Jose de Alencar",
+      "alternativaC": "Carlos Drummond de Andrade",
+      "alternativaD": "Clarice Lispector",
+      "alternativaCerta": "a"
+    },
+    {
+      "enunciado": "Qual instrumento mede a temperatura?",
+      "alternativaA": "Barometro",
+      "alternativaB": "Termometro",
+      "alternativaC": "Velocimetro",
+      "alternativaD": "Hidrometro",
+      "alternativaCerta": "b"
+    },
+    {
+      "enunciado": "Qual pais sediou a Copa do Mundo de 2014?",
+      "alternativaA": "Alemanha",
+      "alternativaB": "Russia",
+      "alternativaC": "Brasil",
+      "alternativaD": "Africa do Sul",
+      "alternativaCerta": "c"
+    },
+    {
+      "enunciado": "Qual e o menor numero primo?",
+      "alternativaA": "0",
+      "alternativaB": "1",
+      "alternativaC": "2",
+      "alternativaD": "3",
+      "alternativaCerta": "c"
+    },
+    {
+      "enunciado": "Qual destes animais e um mamifero?",
+      "alternativaA": "Tubarao",
+      "alternativaB": "Golfinho",
+      "alternativaC": "Jacare",
+      "alternativaD": "Pinguim",
+      "alternativaCerta": "b"
+    },
+    {
+      "enunciado": "Qual cor resulta da mistura de azul e amarelo?",
+      "alternativaA": "Verde",
+      "alternativaB": "Roxo",
+      "alternativaC": "Laranja",
+      "alternativaD": "Cinza",
+      "alternativaCerta": "a"
+    },
+    {
+      "enunciado": "Em qual continente fica o Egito?",
+      "alternativaA": "Asia",
+      "alternativaB": "Europa",
+      "alternativaC": "Africa",
+      "alternativaD": "Oceania",
+      "alternativaCerta": "c"
+    }
+  ]
+}
